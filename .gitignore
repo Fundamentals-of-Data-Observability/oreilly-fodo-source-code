@@ -1,0 +1,9 @@
+.DS_Store
+target
+.bsp
+.vscode
+.sdkmanrc
+dependency-reduced-pom.xml
+.classpath
+.project
+.settings

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>io.kensu.agent</groupId>
+  <artifactId>airbyte-do</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>Airbyte Agent Parent</name>
+  <description>Parent of the libraries for the Airbyte data observability agent</description>
+  
+  <properties>
+    <asm.version>9.3</asm.version>
+    <airbyte.version>0.40.4</airbyte.version>
+    <jackson.version>2.13.0</jackson.version>
+    <slf4j.version>1.7.30</slf4j.version>
+  </properties>
+
+  <repositories>
+    <repository>
+      <id>Airbyte Public Repo</id>
+      <url>https://airbyte.mycloudrepo.io/public/repositories/airbyte-public-jars/</url>
+    </repository>
+  </repositories>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.ow2.asm</groupId>
+        <artifactId>asm</artifactId>
+        <version>${asm.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.ow2.asm</groupId>
+        <artifactId>asm-util</artifactId>
+        <version>${asm.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.ow2.asm</groupId>
+        <artifactId>asm-commons</artifactId>
+        <version>${asm.version}</version>
+      </dependency>
+
+      <!-- dependencies to prepare and send Data Observations -->
+      <!-- currently the version of jackson supported is 2.10+ which should be OK for the 2.13+ -->
+      <dependency>
+        <groupId>io.kensu.dam</groupId>
+        <artifactId>kensu-dam-java-client-jackson-2-10-0</artifactId>
+        <version>1.1.1-SNAPSHOT</version>
+      </dependency>
+
+      <!-- Dependencies related to the project under ASMification -->
+      <dependency>
+        <groupId>io.airbyte</groupId>
+        <artifactId>airbyte-commons</artifactId>
+        <version>${airbyte.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.airbyte</groupId>
+        <artifactId>airbyte-workers</artifactId>
+        <version>${airbyte.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.airbyte.airbyte-protocol</groupId>
+        <artifactId>protocol-models</artifactId>
+        <version>${airbyte.version}</version>
+      </dependency>
+        <dependency>
+        <groupId>io.airbyte.airbyte-config</groupId>
+        <artifactId>config-models</artifactId>
+        <version>${airbyte.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-core</artifactId>
+        <version>${jackson.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>${jackson.version}</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j.version}</version>
+        <scope>provided</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <modules>
+    <module>airbyte-agent</module>
+    <module>airbyte-instrumentation</module>
+  </modules>
+
+
+</project>
