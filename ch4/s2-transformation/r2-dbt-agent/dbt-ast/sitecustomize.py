@@ -153,7 +153,7 @@ class DBTKensuTransformer(NodeTransformer):
           ImportFrom(
             module='kensu_reporting',
             names=[
-                alias(name='maybe_report_postgres', asname=None),
+                alias(name='maybe_report_sql', asname=None),
             ],
             level=0,
           )

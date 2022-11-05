@@ -138,7 +138,16 @@ def pg_to_kensu_entry(kensu_inst, cursor, tname, compute_stats=True):
     return entry
 
 
+def _is_pg_conn_mngr_class(conn_mngr):
+    return 'PostgresConnectionManager' in str(type(conn_mngr))
+
 def report_postgres(conn_mngr, cursor, sql, bindings):
+    is_internal_query = bool(re.search(r"\spg_", sql))
+    # dbt queries a lot of postgres internal tables, like pg_namespace, pg_class, pg_depend etc
+    # and we very likely want to exclude these for now at least
+    if not _is_pg_conn_mngr_class(conn_mngr) or is_internal_query:
+        return None
+
     if bindings is not None:
         # Also we process the "%s" with `bindings` => otherwise the pglast parser fails
         # so the result is
@@ -190,7 +199,7 @@ def report_postgres(conn_mngr, cursor, sql, bindings):
                 register_output_orig_data=True
             )
             kensu_inst.report_with_mapping()
-
+    return True
 
 def query_stats(cursor, schema_fields, orig_tname):
     stats_aggs = pg_generate_fallback_stats_queries(schema_fields)

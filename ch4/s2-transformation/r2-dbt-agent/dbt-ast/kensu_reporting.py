@@ -211,18 +211,17 @@ def kensu_report_rules(model_runner,
             add_not_null_rule(ksu=kensu_collector, ds=out_ds, non_null_col=non_null_col)
 
 
-def _is_pg_conn_mngr_class(conn_mngr):
-    return 'PostgresConnectionManager' in str(type(conn_mngr))
-
-def maybe_report_postgres(conn_mngr, cursor, sql, bindings):
-    # dbt queries a lot of postgres internal tables, like pg_namespace, pg_class, pg_depend etc
-    # and we very likely want to exclude these for now at least
-    is_internal_query = bool(re.search(r"\spg_", sql))
+def maybe_report_sql(conn_mngr, cursor, sql, bindings):
     logging.info("Intercept SQL: " + sql)
-    if _is_pg_conn_mngr_class(conn_mngr) and not is_internal_query:
-        try:
-            report_postgres(conn_mngr=conn_mngr, cursor=cursor, sql=sql, bindings=bindings)
-        except:
-            logging.exception('Got exception on main handler')
-            raise
+    status = False
+    try:
+        # Trying postgres first
+        status = report_postgres(conn_mngr=conn_mngr, cursor=cursor, sql=sql, bindings=bindings)
+        if status is None:
+            # continue with other handlers => we should use the "listener/visitor" pattern with a registry
+            pass
+        return
+    except:
+        logging.exception('Got exception on main handler')
+        raise
 
