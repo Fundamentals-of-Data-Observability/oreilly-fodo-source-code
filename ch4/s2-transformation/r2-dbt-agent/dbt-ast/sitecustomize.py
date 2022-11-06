@@ -1,10 +1,5 @@
-
 # Injecting code in DBT to generate data observations naturally
-# ***DBT*** START
 
-# https://docs.python.org/2/library/site.html#module-site
-
-# https://stackoverflow.com/questions/53626264/rewriting-a-python-module-only-if-it-gets-imported
 import sys
 from ast import *
 from importlib.abc import MetaPathFinder, Loader
@@ -44,8 +39,7 @@ class DBTKensuAgentLoader(Loader):
     self.code = compile(new_tree, self.PSEUDO_FILENAME, 'exec')
 
   def exec_module(self, module):
-    module.__file__ = self.PSEUDO_FILENAME # + module.__file__
-    #exec(self.code, module.__dict__)
+    module.__file__ = self.PSEUDO_FILENAME
     exec(self.code, module.__dict__)
 
 
@@ -198,5 +192,3 @@ class DBTKensuTransformer(NodeTransformer):
 
 # ensuring the Path Finder is loaded first to intercept all others
 sys.meta_path.insert(0, DBTKensuAgentPathFinder())
-
-# ***DBT*** END
