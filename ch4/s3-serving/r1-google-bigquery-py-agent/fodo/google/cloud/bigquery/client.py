@@ -1,17 +1,9 @@
-import sqlparse
 from google.cloud.bigquery import client, Dataset
 import logging
 
-from kensu.client import DataSourcePK, Schema, SchemaPK
-from kensu.utils.helpers import to_datasource
-
 logger = logging.getLogger(__name__)
 
-from .job.offline_parser import BqOfflineParser
 from .job.query import QueryJob
-from google.cloud.bigquery.retry import DEFAULT_RETRY
-from kensu.utils.kensu_provider import KensuProvider
-from .job.remote_parser import BqRemoteParser
 import google.cloud.bigquery as bq
 
 

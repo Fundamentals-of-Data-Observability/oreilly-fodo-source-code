@@ -8,13 +8,6 @@ import traceback
 
 import google
 
-from kensu.google.cloud.bigquery.extractor import KensuBigQuerySupport
-from kensu.google.cloud.bigquery.job.bigquery_stats import compute_bigquery_stats
-from kensu.google.cloud.bigquery.job.offline_parser import BqOfflineParser
-from kensu.google.cloud.bigquery.job.remote_parser import BqRemoteParser
-from kensu.pandas import DataFrame
-from kensu.utils.helpers import report_all2all_lineage
-from kensu.utils.kensu_provider import KensuProvider
 import google.cloud.bigquery as bq
 import google.cloud.bigquery.job as bqj
 
