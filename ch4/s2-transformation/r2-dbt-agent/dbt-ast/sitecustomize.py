@@ -79,7 +79,7 @@ class DBTKensuTransformer(NodeTransformer):
         # add this code:
         # from dbt.task.kensu_reporting import dbt_init_kensu, kensu_report_rules
         # kensu_collector = dbt_init_kensu(context, model)
-        # Index = 1 because after `context`` is created
+        # Index = 1 because after `context` is created
         new_node.body.insert(1,
           ImportFrom(
             module='kensu_reporting',
