@@ -84,8 +84,7 @@ class DBTKensuTransformer(NodeTransformer):
           ImportFrom(
             module='kensu_reporting',
             names=[
-                alias(name='dbt_init_kensu', asname=None),
-                alias(name='kensu_report_rules', asname=None),
+                alias(name='dbt_init_kensu', asname=None)
             ],
             level=0,
           )
@@ -104,40 +103,6 @@ class DBTKensuTransformer(NodeTransformer):
               type_comment=None,
           )
         )
-        # add the lines to create the rules, just before `return some_expr`:
-        # if not kensu_collector.report_to_file:
-        #  kensu_report_rules(self, context, model, kensu_collector, result)
-        new_node.body.insert(
-          -1,
-          If(
-            test=UnaryOp(
-              op=Not(),
-              operand=Attribute(
-                value=Name(id='kensu_collector', ctx=Load()),
-                attr='report_to_file',
-                ctx=Load(),
-              ),
-            ),
-            body=[
-              Expr(
-                value=Call(
-                  func=Name(id='kensu_report_rules', ctx=Load()),
-                  args=[
-                    Name(id='self', ctx=Load()),
-                    Name(id='context', ctx=Load()),
-                    Name(id='model', ctx=Load()),
-                    Name(id='kensu_collector', ctx=Load()),
-                    Name(id='result', ctx=Load()),
-                  ],
-                  keywords=[],
-                ),
-              ),
-            ],
-            orelse=[],
-          )
-        )
-
-
     elif DBTKensuTransformer.CURRENT_SQLConnectionManager:
       if node.name == "add_query":
         # the last statement is `with self.exception_handler(sql):`
@@ -155,7 +120,7 @@ class DBTKensuTransformer(NodeTransformer):
         with_last_statement.body.insert(-1,
           Expr(
             value=Call(
-              func=Name(id='maybe_report_postgres', ctx=Load()),
+              func=Name(id='maybe_report_sql', ctx=Load()),
               args=[
                 Name(id='self', ctx=Load()),
                 Name(id='cursor', ctx=Load()),

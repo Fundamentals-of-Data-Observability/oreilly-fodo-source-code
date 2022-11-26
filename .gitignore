@@ -8,3 +8,4 @@ dependency-reduced-pom.xml
 .project
 .settings
 __pycache__
+conf-dev.ini

@@ -175,42 +175,6 @@ def extract_kensu_output_datasources(model_runner, k, result, model):
         except Exception as e:
             logging.warning('failure in extract_kensu_output_datasources', e)
 
-
-def add_not_null_rule(
-        ksu,  # type: Kensu
-        ds,
-        non_null_col):
-    try:
-        from kensu.utils.rule_engine import add_rule
-        for lds_name in [cat.replace('logical::', '') for cat in ds.categories]:
-            logging.info(f"Adding a Kensu rule: NOT_NULL({non_null_col}) on LDS={lds_name}")
-            lds_context = "LOGICAL_DATA_SOURCE"
-            add_rule(data_source=lds_name, field=f'{non_null_col}.nullrows', type='Range',
-                     parameters={'maxVal': 0},
-                     context=lds_context)
-            ksu.send_rules()
-    except Exception as e:
-        logging.error(f"Error while adding a Kensu rule  NOT_NULL({non_null_col})", e)
-
-
-def kensu_report_rules(model_runner,
-                       context,
-                       model,
-                       kensu_collector,
-                       result
-                       ):
-    # identify data-tests for non-null columns (will be Kensu rules)
-    not_null_data_tests_for_this_model = [v for k, v in context['graph']['nodes'].items()
-                                          if k.startswith('test.') and '.not_null_' in k
-                                          and model.unique_id in v['depends_on']['nodes']]
-    non_null_columns = [t['column_name'] for t in not_null_data_tests_for_this_model]
-
-    # for output relations (table/view) of this model, report kensu metadata like rules or tags
-    for out_ds in extract_kensu_output_datasources(model_runner, kensu_collector, result, model):
-        for non_null_col in non_null_columns:
-            add_not_null_rule(ksu=kensu_collector, ds=out_ds, non_null_col=non_null_col)
-
-
 def maybe_report_sql(conn_mngr, cursor, sql, bindings):
     logging.info("Intercept SQL: " + sql)
     status = False

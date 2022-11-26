@@ -5,7 +5,7 @@ dbt-bigquery===1.0.0
 dbt-postgres===1.0.1
 
 # kensu-py collector and its required deps below
-#kensu==2.0.0
+kensu==2.0.0
 pandas
 numpy
 packaging
