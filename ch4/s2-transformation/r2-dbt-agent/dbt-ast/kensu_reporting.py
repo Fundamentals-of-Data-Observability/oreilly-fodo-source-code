@@ -81,7 +81,7 @@ def init_kensu(
 
 
 def dbt_init_kensu(context, model):
-    from kensu_reporting import init_kensu, str_remove_prefix, kensu_report_rules
+    from kensu_reporting import init_kensu, str_remove_prefix
     kmodel = context['model'] or {}
     kensu_project = kmodel['package_name']
 
